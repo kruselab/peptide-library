@@ -8,15 +8,6 @@ suppressPackageStartupMessages(library(ggseqlogo))
 suppressPackageStartupMessages(library(stringdist))
 
 
-# generate list of common directories and make them if they don't already exist
-setup_wd = function(wd) {
-  for (i in 1:length(wd)) {
-    dir.create(path = wd[[i]])
-  }
-  return(invisible())
-}
-
-
 # load merged reads fastq file
 load_merged_reads = function(file, format = "fastq") {
   reads = readDNAStringSet(filepath = file, use.names = F, format = format)
@@ -140,8 +131,8 @@ plot_peptide_sequence_logos = function(data, returned_alignment = "N") {
 
 
 # run standard analysis pipeline; generate peptide list and sequence logos
-run_pipeline = function(merged_reads_file) {
-  setup_wd(list(output = "output/"))
+run_NGS_pipeline = function(merged_reads_file) {
+  dir.create(path = "output/")
   all_reads = load_merged_reads(merged_reads_file)
   matching_reads = all_reads %>% filter_reads_by_primers(library = "peptide")
   peptides = matching_reads %>%
